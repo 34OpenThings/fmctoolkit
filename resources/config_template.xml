@@ -1,0 +1,42 @@
+<data>
+
+	<!--
+	the following configs are local, they may vary on different machines 
+	-->
+
+	<targetgame />
+	<gamesfolder>C:\folder\folder\games</gamesfolder>
+	<unityexepath>C:\Program Files\Unity\Hub\Editor\2018.3.7f1\Editor\Unity.exe</unityexepath>
+
+	<!-- Needed for shipping on android -->
+	<playconsolejsonkey>C:\folder\folder\nameofyourfile.json</playconsolejsonkey>
+	
+	<!--
+	The following configs are global, no need to edit them on different machines
+	-->
+
+	<fmcparentremoteurl>https://github.com/user/parenturl/</fmcparentremoteurl>
+	<fmcrepourl>https://github.com/34OpenThings/fmcframework</fmcrepourl>
+ 	
+	<companyname>YourCompanyName</companyname>
+	<keystorepassword>insertASafePassword123</keystorepassword>
+
+	<appstoremail>mail@34IsAwesome.com</appstoremail>
+	<testgroupname>fmctesters</testgroupname>
+
+	<!--IOS TEST INFORMATION: feedback email + Beta app review information box. -->
+	<testersfeedbackemail>mail@34IsAwesome.com</testersfeedbackemail>
+	<testerscontactemail>mail@34IsAwesome.com</testerscontactemail>
+	<testerscontactfirstname>Valerius</testerscontactfirstname>
+	<testerscontactlastname>Of Given</testerscontactlastname>
+	<testerscontactphone>000000000</testerscontactphone>
+	<testerstestnotes>Thank you for testing this game!</testerstestnotes>
+
+	<!--Add mails separating with a comma: a@stuff.com,b@stuff.com -->
+	<testersmails>tester1@34IsAwesome.com,tester2@34IsAwesome.com</testersmails>
+
+	<fastlaneappstoreconnectteamid>123456789</fastlaneappstoreconnectteamid>
+	<fastlanedevportalteamid>T3AM1DH3R3</fastlanedevportalteamid>
+	<fastlanecertsrepomail>mail@34IsAwesome.com</fastlanecertsrepomail>
+	<fastlanecertsrepourl>https://github.com/YourUrl/ios_certs.git</fastlanecertsrepourl>
+</data>

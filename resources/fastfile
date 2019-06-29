@@ -1,0 +1,83 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+lane :fmcproduce do
+	produce(
+		app_identifier: "$BUNDLE_ID$", # The bundle identifier of your app
+		username: "$APPLE_ID_EMAIL$", 
+		app_name: "$GAME_TITLE$"
+		)
+end
+lane :fmcmatch do
+	match(
+		app_identifier: "$BUNDLE_ID$", # The bundle identifier of your app
+		username: "$FASTLANE_CERTS_REPO_MAIL$", 
+		git_url: "$FASTLANE_CERTS_REPO_URL$" # Repo url of the certs
+		)
+end
+
+lane :fmctestflight do
+	build_app(scheme: "Unity-iPhone", xcargs: "-allowProvisioningUpdates")
+	upload_to_testflight(
+		username: "$APPLE_ID_EMAIL$",
+		beta_app_feedback_email: "$TESTERS_FEEDBACK_EMAIL$",
+		beta_app_description: "Another marvellous game.",
+		beta_app_review_info: {
+		contact_email: "$TESTERS_CONTACT_EMAIL$",
+		contact_first_name: "$TESTERS_CONTACT_FIRST_NAME$",
+		contact_last_name: "$TESTERS_CONTACT_LAST_NAME$",
+		contact_phone: "$TESTERS_CONTACT_PHONE$",
+		notes: "$TESTERS_TEST_NOTES$"
+  		}
+ 	)
+ end	
+
+lane :fmcsupply do
+	supply(
+		apk: "../$GAME_INTERNAL_NAME$.apk",
+		package_name: "$BUNDLE_ID$",
+		track: "internal",
+		json_key: "$PLAY_CONSOLE_JSON_KEY$"
+		)
+end
+
+lane :fmcfilltestinfo do #should not be needed, but setting feedback_email does not currently work with pilot...
+	fastlane_require "spaceship"
+		Spaceship::Tunes.login("$APPLE_ID_EMAIL$")
+		app = Spaceship::Tunes::Application.find("$BUNDLE_ID$")
+		app_info = Spaceship::TestFlight::AppTestInfo.find(app_id: app.apple_id)
+		app_info.test_info.feedback_email = "$TESTERS_FEEDBACK_EMAIL$";
+		app_info.beta_review_info.contact_email = "$TESTERS_CONTACT_EMAIL$";
+		app_info.beta_review_info.contact_first_name = "$TESTERS_CONTACT_FIRST_NAME$";
+		app_info.beta_review_info.contact_last_name = "$TESTERS_CONTACT_LAST_NAME$";
+		app_info.beta_review_info.contact_phone = "$TESTERS_CONTACT_PHONE$";
+		app_info.save_for_app!(app_id: app.apple_id)
+		UI.message "Beta app feedback_email set"
+end
+
+lane :fmccreatetestgroup do
+		fastlane_require "spaceship"
+		Spaceship::Tunes.login("$APPLE_ID_EMAIL$")
+		app = Spaceship::Tunes::Application.find("$BUNDLE_ID$")
+        groups = Spaceship::TestFlight::Group.filter_groups(app_id: app.apple_id) { |group| group.name == "$TEST_GROUP_NAME$" }
+		if(not groups.kind_of?(Array) or groups.length <= 0)
+			UI.message "Tester group not found. Creating one..."
+			group = Spaceship::TestFlight::Group.create!(app_id: app.apple_id, group_name: "$TEST_GROUP_NAME$")
+		else
+			UI.message "Tester group already exists! Skipping."
+		end
+end
