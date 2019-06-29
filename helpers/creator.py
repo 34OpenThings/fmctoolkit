@@ -32,6 +32,7 @@ def createNewProject(gameName):
 	unityExePath = config.getUnityExePath();
 	unityExeFolderPath = os.path.abspath(os.path.join(unityExePath, os.pardir))
 	gamesFolderPath = config.getFMCGamesFolderPath()
+	nguiFolderPath = config.getNGUIFolderPath()
 	parentRemoteURL = config.getParentRemoteURL()
 	fmcRepoURL = config.getFMCRepoURL()
 
@@ -85,6 +86,11 @@ def createNewProject(gameName):
 	subprocess.call(utils.parList("git pull -u origin master"), cwd=gamePath)
 	subprocess.call(utils.parList("git subtree add --prefix", config.gitSubtreePrefix, fmcRepoURL, "master --squash"), cwd=gamePath)
 	subprocess.call(utils.parList("git push -u origin master"), cwd=gamePath)
+
+	#adding NGUI...
+	shutil.copytree(nguiFolderPath, os.path.join(gamePath, "Assets", "NGUI"))
+	game.gitAdd(".")
+	game.gitCommit("Added NGUI")
 
 	#creating _content folders...
 	utils.createFolder(os.path.join(gamePath, config.fmcContentFolder))

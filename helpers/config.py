@@ -32,6 +32,9 @@ def getFMCGames():
 def getFMCGamesFolderPath():
 	return getSingleParameter('gamesfolder')
 
+def getNGUIFolderPath():
+	return getSingleParameter('nguifolder')
+
 def getUnityExePath():
 	return getSingleParameter('unityexepath')
 
